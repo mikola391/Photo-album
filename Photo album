@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Наша історія — Віртуальна листівка</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+        .book-card {
+            width: 100%;
+            max-width: 400px;
+            min-height: 580px;
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            border: 6px solid #fff;
+        }
+        .page-counter {
+            text-align: right;
+            font-size: 13px;
+            font-weight: bold;
+            color: #d63384;
+            margin-bottom: 10px;
+        }
+        .page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: flipIn 0.45s ease;
+            flex-grow: 1;
+        }
+        .page.active {
+            display: flex;
+        }
+        @keyframes flipIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Віконце (очивка) для фото */
+        .photo-slot {
+            width: 100%;
+            height: 250px;
+            border: 2px dashed #f06595;
+            border-radius: 16px;
+            background-color: #fff5f8;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 18px;
+            transition: 0.3s;
+        }
+        .photo-slot:hover {
+            background-color: #ffe3ec;
+        }
+        .photo-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .photo-placeholder {
+            color: #d63384;
+            font-size: 14px;
+            padding: 15px;
+        }
+        .photo-placeholder span {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        /* Поле для заголовка та вірша */
+        .page-title {
+            font-size: 20px;
+            color: #c2255c;
+            margin-bottom: 10px;
+            font-weight: 700;
+            outline: none;
+            border-bottom: 1px dashed transparent;
+            padding: 2px 6px;
+        }
+        .page-title:focus {
+            border-bottom: 1px dashed #c2255c;
+        }
+        .poem-box {
+            width: 100%;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #343a40;
+            white-space: pre-line;
+            outline: none;
+            padding: 8px;
+            border-radius: 10px;
+            min-height: 130px;
+        }
+        .poem-box:focus {
+            background-color: #fff9db;
+        }
+
+        .hint {
+            font-size: 11px;
+            color: #adb5bd;
+            margin-top: 8px;
+        }
+
+        /* Кнопки навігації */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 14px;
+            background: #d63384;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #a61e4d;
+        }
+        button.secondary {
+            background: #f1f3f5;
+            color: #495057;
+        }
+        button.secondary:hover {
+            background: #e9ecef;
+        }
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="book-card">
+        <div class="page-counter" id="counter">Сторінка 1 з 4</div>
+
+        <!-- СТОРІНКА 1 -->
+        <div class="page active" data-page="1">
+            <label class="photo-slot">
+                <!-- Якщо завантажите фото на GitHub, впишіть назву файлу в src="photo1.jpg" -->
+                <img id="img-1" src="" style="display:none;" alt="Фото 1">
+                <div class="photo-placeholder" id="ph-1">
+                    <span>📷</span>
+                    Натисни, щоб додати фото 1
+                </div>
+                <input type="file" accept="image/*" onchange="loadPhoto(event, 1)">
+            </label>
+            <div class="page-title" contenteditable="true">Наша перша зустріч ❤️</div>
+            <div class="poem-box" contenteditable="true">Натисни на цей текст, щоб вписати свій вірш або привітання...
+
+Твоя усмішка зігріває душу,
+І кожен день з тобою — наче свято.</div>
+        </div>
+
+        <!-- СТОРІНКА 2 -->
+        <div class="page" data-page="2">
+            <label class="photo-slot">
+                <img id="img-2" src="" style="display:none;" alt="Фото 2">
+                <div class="photo-placeholder" id="ph-2">
+                    <span>📷</span>
+                    Натисни, щоб додати фото 2
+                </div>
+                <input type="file" accept="image/*" onchange="loadPhoto(event, 2)">
+            </label>
+            <div class="page-title" contenteditable="true">Найкращі моменти ✨</div>
+            <div class="poem-box" contenteditable="true">Тут може бути другий стовпчик вірша:
+
+З тобою легко мріяти і жити,
+У кожній миті бачити красу.
+Я хочу просто поруч бути,
+Тримати ніжно руку цю.</div>
+        </div>
+
+        <!-- СТОРІНКА 3 -->
+        <div class="page" data-page="3">
+            <label class="photo-slot">
+                <img id="img-3" src="" style="display:none;" alt="Фото 3">
+                <div class="photo-placeholder" id="ph-3">
+                    <span>📷</span>
+                    Натисни, щоб додати фото 3
+                </div>
+                <input type="file" accept="image/*" onchange="loadPhoto(event, 3)">
+            </label>
+            <div class="page-title" contenteditable="true">Моє натхнення 🌸</div>
+            <div class="poem-box" contenteditable="true">Впиши сюди спогад про це фото або ще кілька теплих рядків...</div>
+        </div>
+
+        <!-- СТОРІНКА 4 -->
+        <div class="page" data-page="4">
+            <label class="photo-slot">
+                <img id="img-4" src="" style="display:none;" alt="Фото 4">
+                <div class="photo-placeholder" id="ph-4">
+                    <span>📷</span>
+                    Натисни, щоб додати фото 4
+                </div>
+                <input type="file" accept="image/*" onchange="loadPhoto(event, 4)">
+            </label>
+            <div class="page-title" contenteditable="true">Кохаю тебе! 💖</div>
+            <div class="poem-box" contenteditable="true">Фінальне побажання для найріднішої людини.</div>
+        </div>
+
+        <div class="hint">💡 Підказка: натисніть на рамку, щоб вибрати фото, або на текст, щоб змінити його</div>
+
+        <div class="nav-buttons">
+            <button class="secondary" onclick="changePage(-1)">← Назад</button>
+            <button onclick="changePage(1)">Далі →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 0;
+        const pages = document.querySelectorAll('.page');
+        const counter = document.getElementById('counter');
+
+        function changePage(step) {
+            pages[currentPage].classList.remove('active');
+            currentPage = (currentPage + step + pages.length) % pages.length;
+            pages[currentPage].classList.add('active');
+            counter.textContent = `Сторінка ${currentPage + 1} з ${pages.length}`;
+        }
+
+        // Функція для завантаження фото в віконце (очивку)
+        function loadPhoto(event, pageNum) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById(`img-${pageNum}`);
+                const ph = document.getElementById(`ph-${pageNum}`);
+                img.src = e.target.result;
+                img.style.display = 'block';
+                ph.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Якщо в src вже вписано посилання на фото з GitHub — ховаємо заглушку автоматично
+        window.addEventListener('DOMContentLoaded', () => {
+            pages.forEach((_, idx) => {
+                const num = idx + 1;
+                const img = document.getElementById(`img-${num}`);
+                const ph = document.getElementById(`ph-${num}`);
+                if (img.getAttribute('src') && img.getAttribute('src').trim() !== '') {
+                    img.style.display = 'block';
+                    ph.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
